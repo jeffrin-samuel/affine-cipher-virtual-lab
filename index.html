@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive Affine Cipher Virtual Laboratory">
+  <title>Affine Cipher | Virtual Cryptography Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">⌬</div>
+      <div>
+        <span class="eyebrow">VIRTUAL CRYPTOGRAPHY LAB</span>
+        <h1>Affine Cipher</h1>
+      </div>
+    </div>
+
+    <div class="experiment-badge">EXP-AFFINE</div>
+  </header>
+
+  <main class="app-shell">
+
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="section-kicker">CLASSICAL CRYPTOGRAPHY</span>
+        <h2>Encryption, Decryption &amp; Cryptanalysis</h2>
+        <p>
+          Explore the mathematical structure of the Affine Cipher through
+          interactive encryption, decryption, and brute-force cryptanalysis.
+        </p>
+      </div>
+
+      <div class="hero-stat">
+        <strong>312</strong>
+        <span>Possible Keys</span>
+      </div>
+    </section>
+
+    <nav class="tabs" aria-label="Experiment sections">
+      <button class="tab active" data-section="overview">Overview</button>
+      <button class="tab" data-section="theory">Theory</button>
+      <button class="tab" data-section="encryption">Encryption</button>
+      <button class="tab" data-section="decryption">Decryption</button>
+      <button class="tab" data-section="cryptanalysis">Cryptanalysis</button>
+      <button class="tab" data-section="security">Security Insights</button>
+      <button class="tab" data-section="assessment">Assessment</button>
+    </nav>
+
+    <div id="global-message" class="global-message" role="alert"></div>
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="page-section active">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">01 / OVERVIEW</span>
+          <h2>Experiment Overview</h2>
+        </div>
+      </div>
+
+      <div class="overview-grid">
+        <article class="card aim-card">
+          <span class="card-label">AIM</span>
+          <h3>Study the Affine Cipher</h3>
+          <p>
+            To study and implement the Affine Cipher and demonstrate
+            encryption, decryption and cryptanalysis using modular arithmetic.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-label">LEARNING OBJECTIVES</span>
+          <ul class="check-list">
+            <li>Understand the Affine Cipher.</li>
+            <li>Perform encryption and decryption.</li>
+            <li>Understand modular multiplicative inverse.</li>
+            <li>Validate valid and invalid keys.</li>
+            <li>Perform brute-force cryptanalysis.</li>
+            <li>Understand English n-gram scoring.</li>
+            <li>Analyze the cipher's security limitations.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="card procedure-card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">PROCEDURE</span>
+            <h3>How the experiment works</h3>
+          </div>
+        </div>
+
+        <div class="procedure-grid">
+          <div class="procedure-step">
+            <span>01</span>
+            <h4>Encryption</h4>
+            <p>Enter plaintext and a valid key, then apply E(x) = (ax+b) mod 26.</p>
+          </div>
+
+          <div class="procedure-step">
+            <span>02</span>
+            <h4>Decryption</h4>
+            <p>Find the modular inverse of a and apply D(y) = a⁻¹(y-b) mod 26.</p>
+          </div>
+
+          <div class="procedure-step">
+            <span>03</span>
+            <h4>Cryptanalysis</h4>
+            <p>Try all 312 valid keys, decrypt each candidate and rank them using n-gram scoring.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-start card">
+        <div>
+          <span class="card-label">QUICK START</span>
+          <h3>Try the complete example</h3>
+          <p>Use HELLO with a = 5 and b = 8. The expected ciphertext is RCLLW.</p>
+        </div>
+        <button class="btn primary" data-goto="encryption">Open Encryption →</button>
+      </div>
+    </section>
+
+    <!-- THEORY -->
+    <section id="theory" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">02 / THEORY</span>
+          <h2>Affine Cipher Fundamentals</h2>
+        </div>
+      </div>
+
+      <div class="theory-grid">
+        <article class="card">
+          <span class="card-label">CONCEPT</span>
+          <h3>What is the Affine Cipher?</h3>
+          <p>
+            The Affine Cipher is a monoalphabetic substitution cipher based
+            on modular arithmetic. Each letter is converted into a number,
+            transformed using a linear function, and converted back to a letter.
+          </p>
+        </article>
+
+        <article class="card formula-card">
+          <span class="card-label">ENCRYPTION</span>
+          <div class="formula">E(x) = (a × x + b) mod 26</div>
+          <p>
+            <strong>x</strong> is the plaintext value,
+            <strong>a</strong> is the multiplicative key, and
+            <strong>b</strong> is the additive key.
+          </p>
+        </article>
+
+        <article class="card formula-card">
+          <span class="card-label">DECRYPTION</span>
+          <div class="formula">D(y) = a⁻¹ × (y − b) mod 26</div>
+          <p>
+            <strong>y</strong> is the ciphertext value and
+            <strong>a⁻¹</strong> is the modular multiplicative inverse of a.
+          </p>
+        </article>
+
+        <article class="card">
+          <span class="card-label">KEY CONDITION</span>
+          <div class="formula small">gcd(a, 26) = 1</div>
+          <p>
+            The value of <strong>a</strong> must be relatively prime to 26
+            so that its modular inverse exists.
+          </p>
+        </article>
+      </div>
+
+      <div class="card alphabet-card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">ALPHABET MAPPING</span>
+            <h3>Interactive substitution mapping</h3>
+          </div>
+
+          <div class="inline-controls">
+            <label>
+              a
+              <select id="theory-a"></select>
+            </label>
+
+            <label>
+              b
+              <select id="theory-b"></select>
+            </label>
+          </div>
+        </div>
+
+        <div class="alphabet-row" id="alphabet-row"></div>
+        <div class="mapping-row" id="mapping-row"></div>
+
+        <div class="key-info">
+          <div>
+            <span>Valid a values</span>
+            <strong>1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25</strong>
+          </div>
+          <div>
+            <span>b range</span>
+            <strong>0 – 25</strong>
+          </div>
+          <div>
+            <span>Total keys</span>
+            <strong>12 × 26 = 312</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">MODULAR INVERSE</span>
+            <h3>Why must a be relatively prime to 26?</h3>
+          </div>
+        </div>
+
+        <p>
+          The modular inverse is a number that satisfies:
+        </p>
+
+        <div class="formula">a × a⁻¹ ≡ 1 (mod 26)</div>
+
+        <p>
+          For example, when a = 5:
+        </p>
+
+        <div class="calculation-box">
+          5 × 21 = 105<br>
+          105 mod 26 = 1<br>
+          Therefore, 5⁻¹ mod 26 = 21
+        </div>
+
+        <p class="muted">
+          If gcd(a, 26) ≠ 1, the modular inverse does not exist.
+        </p>
+      </div>
+    </section>
+
+    <!-- ENCRYPTION -->
+    <section id="encryption" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">03 / ENCRYPTION</span>
+          <h2>Encrypt a Message</h2>
+          <p>Apply the Affine transformation character by character.</p>
+        </div>
+      </div>
+
+      <div class="workspace-grid">
+        <article class="card input-card">
+          <span class="card-label">INPUT</span>
+
+          <label class="field-label" for="encrypt-text">Plaintext</label>
+          <textarea id="encrypt-text" rows="5" placeholder="Enter plaintext...">HELLO</textarea>
+
+          <div class="key-inputs">
+            <label>
+              <span class="field-label">a</span>
+              <select id="encrypt-a"></select>
+            </label>
+
+            <label>
+              <span class="field-label">b</span>
+              <select id="encrypt-b"></select>
+            </label>
+          </div>
+
+          <div id="encrypt-key-status" class="key-status"></div>
+
+          <div class="button-row">
+            <button class="btn primary" id="encrypt-btn">Encrypt</button>
+            <button class="btn secondary" id="encrypt-example">Load Example</button>
+            <button class="btn ghost" id="encrypt-clear">Clear</button>
+          </div>
+        </article>
+
+        <article class="card result-card">
+          <span class="card-label">RESULT</span>
+
+          <div class="result-block">
+            <span>Plaintext</span>
+            <strong id="encrypt-plain-result">—</strong>
+          </div>
+
+          <div class="result-arrow">↓</div>
+
+          <div class="result-block">
+            <span>Ciphertext</span>
+            <strong class="accent-text" id="encrypt-cipher-result">—</strong>
+          </div>
+
+          <button class="btn small secondary copy-btn" data-copy-target="encrypt-cipher-result">
+            Copy Result
+          </button>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">STEP-BY-STEP</span>
+            <h3>Encryption calculations</h3>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Value</th>
+                <th>Calculation</th>
+                <th>Output Value</th>
+                <th>Cipher</th>
+              </tr>
+            </thead>
+            <tbody id="encrypt-steps">
+              <tr>
+                <td colspan="5" class="empty-state">Run encryption to see the calculations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <div class="info-strip">
+        <strong>Character handling:</strong>
+        Only alphabetic characters are transformed. Spaces and punctuation are preserved.
+        Input is treated case-insensitively and output is shown in uppercase.
+      </div>
+    </section>
+
+    <!-- DECRYPTION -->
+    <section id="decryption" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">04 / DECRYPTION</span>
+          <h2>Decrypt a Message</h2>
+          <p>Recover plaintext using the modular multiplicative inverse.</p>
+        </div>
+      </div>
+
+      <div class="workspace-grid">
+        <article class="card input-card">
+          <span class="card-label">INPUT</span>
+
+          <label class="field-label" for="decrypt-text">Ciphertext</label>
+          <textarea id="decrypt-text" rows="5" placeholder="Enter ciphertext...">RCLLW</textarea>
+
+          <div class="key-inputs">
+            <label>
+              <span class="field-label">a</span>
+              <select id="decrypt-a"></select>
+            </label>
+
+            <label>
+              <span class="field-label">b</span>
+              <select id="decrypt-b"></select>
+            </label>
+          </div>
+
+          <div id="decrypt-key-status" class="key-status"></div>
+
+          <div class="button-row">
+            <button class="btn primary" id="decrypt-btn">Decrypt</button>
+            <button class="btn secondary" id="decrypt-example">Load Example</button>
+            <button class="btn ghost" id="decrypt-clear">Clear</button>
+          </div>
+        </article>
+
+        <article class="card result-card">
+          <span class="card-label">RESULT</span>
+
+          <div class="inverse-display">
+            <span>Modular inverse</span>
+            <strong id="inverse-result">—</strong>
+          </div>
+
+          <div class="result-arrow">↓</div>
+
+          <div class="result-block">
+            <span>Ciphertext</span>
+            <strong id="decrypt-cipher-result">—</strong>
+          </div>
+
+          <div class="result-arrow">↓</div>
+
+          <div class="result-block">
+            <span>Recovered plaintext</span>
+            <strong class="accent-text" id="decrypt-plain-result">—</strong>
+          </div>
+
+          <button class="btn small secondary copy-btn" data-copy-target="decrypt-plain-result">
+            Copy Result
+          </button>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">MODULAR INVERSE</span>
+            <h3>Inverse calculation</h3>
+          </div>
+        </div>
+
+        <div id="inverse-explanation" class="calculation-box">
+          Enter a valid key and decrypt to see the inverse calculation.
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">STEP-BY-STEP</span>
+            <h3>Decryption calculations</h3>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Cipher</th>
+                <th>Value</th>
+                <th>Calculation</th>
+                <th>Recovered Value</th>
+                <th>Plaintext</th>
+              </tr>
+            </thead>
+            <tbody id="decrypt-steps">
+              <tr>
+                <td colspan="5" class="empty-state">Run decryption to see the calculations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- CRYPTANALYSIS -->
+    <section id="cryptanalysis" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">05 / CRYPTANALYSIS</span>
+          <h2>Break the Cipher</h2>
+          <p>
+            Try every possible Affine key and rank the resulting plaintexts
+            using English n-gram scoring.
+          </p>
+        </div>
+      </div>
+
+      <article class="card attack-card">
+        <div class="attack-input">
+          <label class="field-label" for="attack-text">Ciphertext to analyze</label>
+          <textarea id="attack-text" rows="4" placeholder="Enter ciphertext...">RCLLW</textarea>
+
+          <div class="button-row">
+            <button class="btn primary" id="attack-btn">Start Cryptanalysis</button>
+            <button class="btn secondary" id="attack-example">Load Example</button>
+            <button class="btn ghost" id="attack-clear">Clear</button>
+          </div>
+        </div>
+
+        <div class="attack-method">
+          <span class="card-label">ATTACK METHOD</span>
+          <div class="method-pill">BRUTE FORCE + ENGLISH N-GRAM SCORING</div>
+          <p>
+            The attack evaluates all 12 valid values of <em>a</em> and all
+            26 values of <em>b</em>.
+          </p>
+        </div>
+      </article>
+
+      <article class="card">
+        <span class="card-label">ATTACK PIPELINE</span>
+
+        <div class="pipeline">
+          <div class="pipeline-node">Ciphertext</div>
+          <span>→</span>
+          <div class="pipeline-node">Valid a</div>
+          <span>→</span>
+          <div class="pipeline-node">26 b values</div>
+          <span>→</span>
+          <div class="pipeline-node">312 Keys</div>
+          <span>→</span>
+          <div class="pipeline-node">Decrypt</div>
+          <span>→</span>
+          <div class="pipeline-node">N-Gram Score</div>
+          <span>→</span>
+          <div class="pipeline-node">Rank</div>
+        </div>
+
+        <div class="progress-area">
+          <div class="progress-label">
+            <span id="attack-progress-text">Ready</span>
+            <strong id="attack-progress-count">0 / 312</strong>
+          </div>
+          <div class="progress-track">
+            <div id="attack-progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
+      </article>
+
+      <div class="attack-summary-grid">
+        <article class="metric-card">
+          <span>Keys Tested</span>
+          <strong id="keys-tested">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span>Top Candidate</span>
+          <strong id="top-candidate">—</strong>
+        </article>
+
+        <article class="metric-card">
+          <span>Best Key</span>
+          <strong id="best-key">—</strong>
+        </article>
+
+        <article class="metric-card">
+          <span>Score</span>
+          <strong id="best-score">—</strong>
+        </article>
+      </div>
+
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-label">RANKED CANDIDATES</span>
+            <h3>Highest-scoring plaintexts</h3>
+          </div>
+
+          <button class="btn small secondary" id="show-all-btn" disabled>
+            Show All 312
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>a</th>
+                <th>b</th>
+                <th>a⁻¹</th>
+                <th>Candidate Plaintext</th>
+                <th>English Score</th>
+              </tr>
+            </thead>
+            <tbody id="attack-results">
+              <tr>
+                <td colspan="6" class="empty-state">Run cryptanalysis to generate candidates.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="card candidate-card hidden" id="candidate-details">
+        <div class="card-header">
+          <div>
+            <span class="card-label">SELECTED CANDIDATE</span>
+            <h3 id="candidate-title">Candidate</h3>
+          </div>
+        </div>
+
+        <div class="candidate-meta">
+          <div><span>Key</span><strong id="candidate-key">—</strong></div>
+          <div><span>Inverse</span><strong id="candidate-inverse">—</strong></div>
+          <div><span>Score</span><strong id="candidate-score">—</strong></div>
+        </div>
+
+        <div class="candidate-plaintext" id="candidate-plaintext">—</div>
+
+        <div class="ngram-box">
+          <div class="card-header">
+            <div>
+              <span class="card-label">N-GRAM VIEW</span>
+              <h3>Scoring evidence</h3>
+            </div>
+            <span class="relative-score" id="relative-score">0%</span>
+          </div>
+
+          <div id="ngram-list" class="ngram-list"></div>
+        </div>
+
+        <button class="btn secondary" id="candidate-decrypt-steps">
+          View Decryption Steps
+        </button>
+
+        <div id="candidate-steps" class="candidate-steps hidden"></div>
+      </article>
+
+      <article class="card explanation-card">
+        <button class="accordion-button" data-accordion="ngram-explanation">
+          <span>What is n-gram scoring?</span>
+          <span>+</span>
+        </button>
+
+        <div id="ngram-explanation" class="accordion-content">
+          <p>
+            An n-gram is a sequence of consecutive characters. For example,
+            <strong>THE</strong> is a trigram and <strong>TION</strong> is a
+            quadgram.
+          </p>
+          <p>
+            The cryptanalysis engine compares character sequences in each
+            candidate against an embedded English n-gram frequency dataset.
+            Common English sequences contribute higher scores, while unlikely
+            sequences contribute lower scores.
+          </p>
+          <p>
+            The highest score is therefore the <strong>most likely candidate
+            according to the scoring model</strong>, not a mathematical
+            guarantee of correctness.
+          </p>
+          <div class="ngram-examples">
+            <span>THE</span>
+            <span>AND</span>
+            <span>ING</span>
+            <span>TION</span>
+            <span>THER</span>
+            <span>WITH</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="security" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">06 / SECURITY INSIGHTS</span>
+          <h2>What Does the Attack Teach Us?</h2>
+        </div>
+      </div>
+
+      <div class="security-grid">
+        <article class="security-card">
+          <div class="security-icon">312</div>
+          <h3>Small Keyspace</h3>
+          <p>
+            There are only 312 possible keys for a 26-character alphabet.
+            This makes exhaustive search practical.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="security-icon">01</div>
+          <h3>Monoalphabetic</h3>
+          <p>
+            Each plaintext letter is consistently mapped to one ciphertext
+            letter for a given key.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="security-icon">⌁</div>
+          <h3>Statistical Weakness</h3>
+          <p>
+            English letter and n-gram patterns can provide information useful
+            for identifying likely plaintexts.
+          </p>
+        </article>
+
+        <article class="security-card">
+          <div class="security-icon">!</div>
+          <h3>Classical Cipher</h3>
+          <p>
+            The Affine Cipher is useful for learning cryptography concepts,
+            but it is not suitable for modern secure communication.
+          </p>
+        </article>
+      </div>
+
+      <article class="card">
+        <span class="card-label">KEY TAKEAWAY</span>
+        <h3>Why cryptanalysis is possible</h3>
+
+        <div class="insight-flow">
+          <div>
+            <strong>Small keyspace</strong>
+            <span>312 possibilities</span>
+          </div>
+          <div class="flow-arrow">+</div>
+          <div>
+            <strong>Statistical structure</strong>
+            <span>English patterns</span>
+          </div>
+          <div class="flow-arrow">=</div>
+          <div>
+            <strong>Attackable cipher</strong>
+            <span>Candidate ranking</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ASSESSMENT -->
+    <section id="assessment" class="page-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">07 / ASSESSMENT</span>
+          <h2>Test Your Understanding</h2>
+          <p>Answer the questions to review the concepts covered in the experiment.</p>
+        </div>
+      </div>
+
+      <article class="card quiz-card" id="quiz-container">
+        <div class="quiz-top">
+          <span class="card-label" id="quiz-progress">QUESTION 1 / 10</span>
+          <span class="quiz-score">Score: <strong id="quiz-score">0</strong></span>
+        </div>
+
+        <div class="quiz-progress-track">
+          <div id="quiz-progress-bar"></div>
+        </div>
+
+        <h3 id="quiz-question"></h3>
+
+        <div id="quiz-options" class="quiz-options"></div>
+
+        <div id="quiz-feedback" class="quiz-feedback hidden"></div>
+
+        <div class="quiz-actions">
+          <button class="btn primary" id="quiz-submit">Submit Answer</button>
+          <button class="btn secondary hidden" id="quiz-next">Next Question</button>
+        </div>
+      </article>
+
+      <article class="card quiz-complete hidden" id="quiz-complete">
+        <div class="complete-icon">✓</div>
+        <span class="card-label">ASSESSMENT COMPLETE</span>
+        <h2 id="final-score">0 / 10</h2>
+        <p id="final-message"></p>
+
+        <button class="btn primary" id="quiz-retake">Retake Quiz</button>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <strong>Affine Cipher Virtual Laboratory</strong>
+        <span>Classical Cryptography Experiment</span>
+      </div>
+
+      <div class="references">
+        <strong>References</strong>
+        <span>William Stallings, Cryptography and Network Security</span>
+        <span>Douglas Stinson, Cryptography: Theory and Practice</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
